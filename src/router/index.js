@@ -1,14 +1,8 @@
 import { Router } from "express";
+import authRouter from "./authRouter.js";
 
-const router = new Router()
+const router = new Router();
 
-router.get("/users", (req, res) => {
-    res.json({
-      users: [
-        { id: 1, name: "Miroslav" },
-        { id: 2, name: "Alisa" }
-      ]
-    });
-  });
-  
-  export default router;
+router.use("/auth", authRouter);
+
+export default router;

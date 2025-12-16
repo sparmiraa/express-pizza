@@ -1,4 +1,4 @@
-import ApiError from "../exceptions/api-error.js";
+import ApiError from "../exceptions/apiError.js";
 import HttpStatus from "../constants/httpStatus.js";
 
 export default function (err, req, res, next) {
