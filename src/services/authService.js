@@ -1,5 +1,10 @@
+import bcrypt from "bcrypt";
+import { User } from "../models/index.js";
+import { Role } from "../models/index.js";
 import userService from "./userService.js";
 import tokenService from "./tokenService.js";
+import { normalizeEmail } from "../utils/normalizeEmail.js";
+import ApiError from "../exceptions/apiError.js";
 
 class AuthService {
   async registration(dto) {
@@ -18,7 +23,45 @@ class AuthService {
     return {
       accessToken,
       refreshToken,
-      user: userData,
+    };
+  }
+
+  async login(email, password) {
+    const normalizedEmail = normalizeEmail(email);
+
+    const user = await User.findOne({
+      where: { email: normalizedEmail },
+      attributes: ["id", "email", "password"],
+      include: {
+        model: Role,
+        attributes: ["name"],
+      },
+    });
+
+    if (!user) {
+      throw ApiError.Unauthorized("Неверный email или пароль");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      throw ApiError.Unauthorized("Неверный email или пароль");
+    }
+
+    const roles = user.Roles.map((role) => role.name);
+
+    const accessToken = tokenService.generateAccessToken({
+      userId: user.id,
+      roles: roles,
+    });
+
+    const refreshToken = tokenService.generateRefreshToken({
+      userId: user.id,
+    });
+
+    return {
+      accessToken,
+      refreshToken,
     };
   }
 }

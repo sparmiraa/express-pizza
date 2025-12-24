@@ -5,11 +5,13 @@ import { UserRole } from "./UserRole.js";
 User.belongsToMany(Role, {
   through: UserRole,
   foreignKey: "userId",
+  otherKey: "roleId",
 });
 
 Role.belongsToMany(User, {
   through: UserRole,
   foreignKey: "roleId",
+  otherKey: "userId",
 });
 
 export { User, Role, UserRole };

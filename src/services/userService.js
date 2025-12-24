@@ -1,23 +1,14 @@
-import bcrypt from "bcrypt";
-import { User } from "../models/User.js";
-import { Role } from "../models/Role.js";
+import { hashPassword } from "../crypto/index.js";
+import { normalizeEmail } from "../utils/normalizeEmail.js";
+import { User } from "../models/index.js";
+import { Role } from "../models/index.js";
 import Roles from "../constants/roles.js";
 import ApiError from "../exceptions/apiError.js";
 
-const SALT_ROUNDS = 10;
 
 class UserService {
-  normalizeEmail(email) {
-    return email.trim().toLowerCase();
-  }
-
-  async hashPassword(password) {
-    return bcrypt.hash(password, SALT_ROUNDS);
-  }
-
   async createUser({ firstName, lastName, email, password }) {
-    const normalizedEmail = this.normalizeEmail(email);
-
+    const normalizedEmail = normalizeEmail(email);
     const existingUser = await User.findOne({
       where: { email: normalizedEmail },
     });
@@ -28,7 +19,7 @@ class UserService {
       );
     }
 
-    const hashedPassword = await this.hashPassword(password);
+    const hashedPassword = await hashPassword(password);
 
     const createdUser = await User.create({
       firstName,
