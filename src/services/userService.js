@@ -5,6 +5,7 @@ import { Role } from "../models/index.js";
 import Roles from "../constants/roles.js";
 import ApiError from "../exceptions/apiError.js";
 import { sequelize } from "../sequelize/sequelize.js";
+import { toUserProfileDto } from "../mapper/user-mapper.js";
 
 class UserService {
   async createUser({ firstName, lastName, email, password }) {
@@ -75,17 +76,7 @@ class UserService {
       throw ApiError.NotFound("Пользователь не найден");
     }
 
-    return this.toDto(user);
-  }
-
-  toDto(user) {
-    return {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      roles: user.Roles.map((role) => role.name),
-    };
+    return toUserProfileDto(user);
   }
 }
 

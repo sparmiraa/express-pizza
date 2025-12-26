@@ -66,7 +66,7 @@ class AuthService {
   }
 
   async refresh(refreshToken) {
-    const tokenData = tokenService.extractRefreshTokenData(refreshToken);
+    const tokenData = tokenService.extractUserIdFromRefresh(refreshToken);
     if (!tokenData) {
       throw ApiError.Unauthorized();
     }

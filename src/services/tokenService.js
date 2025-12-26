@@ -22,7 +22,7 @@ class TokenService {
     }
   }
 
-  extractUserIdFromAccess(token) {
+  extractUserDataFromAccess(token) {
     try {
       return jwt.verify(token, env.JWT_ACCESS_SECRET)
     } catch (e) {

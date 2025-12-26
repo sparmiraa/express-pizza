@@ -15,7 +15,7 @@ export default function authMiddleware(req, res, next) {
       throw ApiError.Unauthorized();
     }
 
-    const payload = tokenService.extractUserIdFromAccess(token);
+    const payload = tokenService.extractUserDataFromAccess(token);
 
     if (!payload) {
       throw ApiError.Unauthorized();
