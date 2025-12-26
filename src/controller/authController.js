@@ -55,30 +55,14 @@ class AuthController {
         throw ApiError.Unauthorized();
       }
 
-      const userData = tokenService.validateRefreshToken(refreshToken);
-      if (!userData) {
-        throw ApiError.Unauthorized();
-      }
+      const data = authService.refresh(refreshToken)
 
-      const user = await userService.getUserById(userData.userId);
-
-      const roles = user.Roles.map((role) => role.name);
-
-      const newAccessToken = tokenService.generateAccessToken({
-        userId: user.id,
-        roles,
-      });
-
-      const newRefreshToken = tokenService.generateRefreshToken({
-        userId: user.id,
-      });
-
-      res.cookie("refreshToken", newRefreshToken, {
+      res.cookie("refreshToken", data.refreshToken, {
         httpOnly: true,
         maxAge: env.TIME_TO_LIVE_REFRESH_TOKEN,
       });
 
-      return res.json({ accessToken: newAccessToken });
+      return res.json({ accessToken: data.accessToken });
     } catch (e) {
       next(e);
     }
