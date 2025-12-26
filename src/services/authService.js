@@ -64,6 +64,31 @@ class AuthService {
       refreshToken,
     };
   }
+
+  async refresh(refreshToken) {
+    const tokenData = tokenService.extractUserIdFromRefresh(refreshToken);
+    if (!tokenData) {
+      throw ApiError.Unauthorized();
+    }
+
+    const user = await userService.getUserById(tokenData.userId);
+
+    const roles = user.Roles.map((role) => role.name);
+
+    const newAccessToken = tokenService.generateAccessToken({
+      userId: user.id,
+      roles,
+    });
+
+    const newRefreshToken = tokenService.generateRefreshToken({
+      userId: user.id,
+    });
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    };
+  }
 }
 
 export default new AuthService();

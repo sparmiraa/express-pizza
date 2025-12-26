@@ -14,9 +14,17 @@ class TokenService {
     });
   }
 
-  validateRefreshToken(token) {
+  extractUserIdFromRefresh(token) {
     try {
       return jwt.verify(token, env.JWT_REFRESH_SECRET)
+    } catch (e) {
+      return null
+    }
+  }
+
+  extractUserDataFromAccess(token) {
+    try {
+      return jwt.verify(token, env.JWT_ACCESS_SECRET)
     } catch (e) {
       return null
     }

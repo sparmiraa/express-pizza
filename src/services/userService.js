@@ -5,14 +5,15 @@ import { Role } from "../models/index.js";
 import Roles from "../constants/roles.js";
 import ApiError from "../exceptions/apiError.js";
 import { sequelize } from "../sequelize/sequelize.js";
+import { toUserProfileDto } from "../mapper/user-mapper.js";
 
 class UserService {
-  async createUser({firstName, lastName, email, password}) {
+  async createUser({ firstName, lastName, email, password }) {
     return await sequelize.transaction(async (t) => {
       const normalizedEmail = normalizeEmail(email);
 
       const existingUser = await User.findOne({
-        where: {email: normalizedEmail},
+        where: { email: normalizedEmail },
         transaction: t,
       });
 
@@ -31,15 +32,15 @@ class UserService {
           email: normalizedEmail,
           password: hashedPassword,
         },
-        {transaction: t}
+        { transaction: t }
       );
 
       const userRole = await Role.findOne({
-        where: {name: Roles.USER},
+        where: { name: Roles.USER },
         transaction: t,
       });
 
-      await createdUser.addRole(userRole, {transaction: t});
+      await createdUser.addRole(userRole, { transaction: t });
 
       return {
         userId: createdUser.id,
@@ -58,6 +59,24 @@ class UserService {
     }
 
     return user;
+  }
+
+  async getUserProfile(userId) {
+    const user = await User.findOne({
+      where: { id: userId },
+      attributes: ["id", "firstName", "lastName", "email"],
+      include: {
+        model: Role,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+    });
+
+    if (!user) {
+      throw ApiError.NotFound("Пользователь не найден");
+    }
+
+    return toUserProfileDto(user);
   }
 }
 
