@@ -12,6 +12,22 @@ class UserController {
       next(e);
     }
   }
+
+  async updateUser(req, res, next) {
+    try {
+      const { userId } = req.user;
+      const { firstName, lastName } = req.body;
+
+      const updatedUser = await userService.updateUser(userId, {
+        firstName,
+        lastName,
+      });
+
+      return res.json(updatedUser)
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default new UserController();
