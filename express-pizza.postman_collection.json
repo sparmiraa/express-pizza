@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "ba89b6f9-d113-4cb3-a335-9fd2dfcefac6",
+		"name": "express-pizza",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50582170",
+		"_collection_link": "https://sparmira9-3479697.postman.co/workspace/alice's-Workspace~4c239239-1f37-48d5-87c1-e9014bf4875d/collection/50582170-ba89b6f9-d113-4cb3-a335-9fd2dfcefac6?action=share&source=collection_link&creator=50582170"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "registration",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

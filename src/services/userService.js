@@ -4,40 +4,60 @@ import { User } from "../models/index.js";
 import { Role } from "../models/index.js";
 import Roles from "../constants/roles.js";
 import ApiError from "../exceptions/apiError.js";
-
+import { sequelize } from "../sequelize/sequelize.js";
 
 class UserService {
-  async createUser({ firstName, lastName, email, password }) {
-    const normalizedEmail = normalizeEmail(email);
-    const existingUser = await User.findOne({
-      where: { email: normalizedEmail },
+  async createUser({firstName, lastName, email, password}) {
+    return await sequelize.transaction(async (t) => {
+      const normalizedEmail = normalizeEmail(email);
+
+      const existingUser = await User.findOne({
+        where: {email: normalizedEmail},
+        transaction: t,
+      });
+
+      if (existingUser) {
+        throw ApiError.BadRequest(
+          "Пользователь с такой электронной почтой уже существует"
+        );
+      }
+
+      const hashedPassword = await hashPassword(password);
+
+      const createdUser = await User.create(
+        {
+          firstName,
+          lastName,
+          email: normalizedEmail,
+          password: hashedPassword,
+        },
+        {transaction: t}
+      );
+
+      const userRole = await Role.findOne({
+        where: {name: Roles.USER},
+        transaction: t,
+      });
+
+      await createdUser.addRole(userRole, {transaction: t});
+
+      return {
+        userId: createdUser.id,
+        roles: [Roles.USER],
+      };
+    });
+  }
+
+  async getUserById(userId) {
+    const user = await User.findByPk(userId, {
+      include: Role,
     });
 
-    if (existingUser) {
-      throw ApiError.BadRequest(
-        "Пользователь с такой электронной почтой уже существует"
-      );
+    if (!user) {
+      throw ApiError.Unauthorized();
     }
 
-    const hashedPassword = await hashPassword(password);
-
-    const createdUser = await User.create({
-      firstName,
-      lastName,
-      email: normalizedEmail,
-      password: hashedPassword,
-    });
-
-    const userRole = await Role.findOne({
-      where: { name: Roles.USER },
-    });
-
-    await createdUser.addRole(userRole);
-
-    return {
-      userId: createdUser.id,
-      roles: [Roles.USER],
-    };
+    return user;
   }
 }
 

@@ -13,6 +13,14 @@ class TokenService {
       expiresIn: "30d",
     });
   }
+
+  validateRefreshToken(token) {
+    try {
+      return jwt.verify(token, env.JWT_REFRESH_SECRET)
+    } catch (e) {
+      return null
+    }
+  }
 }
 
 export default new TokenService();
