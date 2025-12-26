@@ -78,6 +78,23 @@ class UserService {
 
     return toUserProfileDto(user);
   }
+
+  async updateUser(userId, body) {
+    const user = await User.findByPk(userId, {
+      include: Role,
+    });
+
+    if (!user) {
+      throw ApiError.NotFound("Пользователь не найден");
+    }
+
+    await user.update({
+      firstName: body.firstName,
+      lastName: body.lastName,
+    });
+
+    return toUserProfileDto(user);
+  }
 }
 
 export default new UserService();
