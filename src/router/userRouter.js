@@ -8,5 +8,6 @@ const router = new Router();
 
 router.get("/me", authMiddleware, userController.getMe);
 router.put("/", authMiddleware, validateMiddleware(updateUserSchema), userController.updateUser)
+router.delete("/", authMiddleware, userController.deleteMe)
 
 export default router;
