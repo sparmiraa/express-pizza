@@ -117,6 +117,68 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNzY2NzY0MTY4LCJleHAiOjE3NjY3NjQ0Njh9.A3Mp8EH5HtVZcrV3q_t2_FDQ5HiLA5Lsb9GZ_JFIUlk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Ivanek\",\r\n  \"lastName\": \"Ivanovik\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNzY2OTk5NzM2LCJleHAiOjE3NjcwMDAwMzZ9.77PBlebEALwAkV-jdBwP7d8A9kNnQp1at2g7mY-Yh5s",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

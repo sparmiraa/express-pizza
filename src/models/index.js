@@ -6,12 +6,14 @@ User.belongsToMany(Role, {
   through: UserRole,
   foreignKey: "userId",
   otherKey: "roleId",
+  onDelete: "CASCADE",
 });
 
 Role.belongsToMany(User, {
   through: UserRole,
   foreignKey: "roleId",
   otherKey: "userId",
+  onDelete: "CASCADE",
 });
 
 export { User, Role, UserRole };

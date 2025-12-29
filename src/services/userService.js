@@ -95,6 +95,16 @@ class UserService {
 
     return toUserProfileDto(user);
   }
+
+  async deleteUser(userId) {
+    const deletedCount = await User.destroy({
+      where: { id: userId },
+    });
+
+    if (deletedCount === 0) {
+      throw ApiError.NotFound("Пользователь не найден");
+    }
+  }
 }
 
 export default new UserService();
