@@ -1,3 +1,4 @@
+import HttpStatus from "../constants/httpStatus.js";
 import userService from "../services/userService.js";
 
 class UserController {
@@ -23,9 +24,21 @@ class UserController {
         lastName,
       });
 
-      return res.json(updatedUser)
+      return res.json(updatedUser);
     } catch (e) {
       next(e);
+    }
+  }
+
+  async deleteMe(req, res, next) {
+    try {
+      const { userId } = req.user;
+
+      await userService.deleteUser(userId);
+
+      return res.sendStatus(HttpStatus.NO_CONTENT);
+    } catch (e) {
+      next(e)
     }
   }
 }
