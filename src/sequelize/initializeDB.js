@@ -3,7 +3,7 @@ import { initRoles } from "./initRoles.js";
 import { initAdmin } from "./initAdmin.js";
 import "../models/index.js";
 
-export const connectDatabase = async () => {
+export const initializeDB = async () => {
     try {
       await sequelize.authenticate();
       await sequelize.sync({ force: false });
