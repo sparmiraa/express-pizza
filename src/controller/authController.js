@@ -55,7 +55,7 @@ class AuthController {
         throw ApiError.Unauthorized();
       }
 
-      const data = authService.refresh(refreshToken)
+      const data = await authService.refresh(refreshToken)
 
       res.cookie("refreshToken", data.refreshToken, {
         httpOnly: true,
